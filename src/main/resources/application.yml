@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: kafka-streams-analytics
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    streams:
+      application-id: kafka-streams-analytics
+      default-key-serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+      default-value-serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
+server:
+  port: 8080
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

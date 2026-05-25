@@ -9,7 +9,6 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,20 +20,15 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Run unit tests (TopologyTestDriver)
-        run: mvn test -Punit-tests
+      - name: Build and run tests
+        run: mvn clean verify -Dspring.profiles.active=test
 
-      - name: Run integration tests (Testcontainers)
-        run: mvn verify -Pintegration-tests
-
-      - name: Generate JaCoCo coverage report
-        run: mvn jacoco:report
-
-      - name: Upload coverage report
+      - name: Upload test results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: jacoco-report
-          path: target/site/jacoco/
+          name: test-results
+          path: target/surefire-reports/
 
       - name: Build Docker image
         run: docker build -t kafka-streams-analytics:${{ github.sha }} .
